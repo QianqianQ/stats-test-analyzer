@@ -1,0 +1,112 @@
+<div class="card mb-4">
+  <div class="card-header">
+    <h4 class="card-title mb-0">Test Data Input</h4>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="abTestForm" (ngSubmit)="onSubmit()">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="card bg-secondary">
+            <div class="card-header">
+              <h5 class="mb-0">Control Group (A)</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="controlSize" class="form-label">Sample Size</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="controlSize" 
+                  formControlName="controlSize"
+                  placeholder="e.g., 1000" 
+                  min="1" 
+                  required
+                  [ngClass]="{'is-invalid': abTestForm.get('controlSize')?.invalid && (abTestForm.get('controlSize')?.dirty || abTestForm.get('controlSize')?.touched)}">
+                <div class="form-text">Total number of users/sessions in control group</div>
+                <div class="invalid-feedback" *ngIf="abTestForm.get('controlSize')?.errors?.['required']">
+                  Sample size is required
+                </div>
+                <div class="invalid-feedback" *ngIf="abTestForm.get('controlSize')?.errors?.['min']">
+                  Sample size must be at least 1
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="controlConversions" class="form-label">Conversions</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="controlConversions" 
+                  formControlName="controlConversions"
+                  placeholder="e.g., 150" 
+                  min="0" 
+                  required
+                  [ngClass]="{'is-invalid': (abTestForm.get('controlConversions')?.invalid && (abTestForm.get('controlConversions')?.dirty || abTestForm.get('controlConversions')?.touched)) || abTestForm.hasError('controlConversionsTooLarge')}">
+                <div class="form-text">Number of successful conversions in control group</div>
+                <div class="invalid-feedback" *ngIf="abTestForm.get('controlConversions')?.errors?.['required']">
+                  Conversions count is required
+                </div>
+                <div class="invalid-feedback" *ngIf="abTestForm.get('controlConversions')?.errors?.['min']">
+                  Conversions cannot be negative
+                </div>
+                <div class="invalid-feedback" *ngIf="abTestForm.hasError('controlConversionsTooLarge')">
+                  Conversions cannot exceed sample size
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card bg-secondary">
+            <div class="card-header">
+              <h5 class="mb-0">Variation Group (B)</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="variationSize" class="form-label">Sample Size</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="variationSize" 
+                  formControlName="variationSize"
+                  placeholder="e.g., 1000" 
+                  min="1" 
+                  required
+                  [ngClass]="{'is-invalid': abTestForm.get('variationSize')?.invalid && (abTestForm.get('variationSize')?.dirty || abTestForm.get('variationSize')?.touched)}">
+                <div class="form-text">Total number of users/sessions in variation group</div>
+                <div class="invalid-feedback" *ngIf="abTestForm.get('variationSize')?.errors?.['required']">
+                  Sample size is required
+                </div>
+                <div class="invalid-feedback" *ngIf="abTestForm.get('variationSize')?.errors?.['min']">
+                  Sample size must be at least 1
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="variationConversions" class="form-label">Conversions</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="variationConversions" 
+                  formControlName="variationConversions"
+                  placeholder="e.g., 180" 
+                  min="0" 
+                  required
+                  [ngClass]="{'is-invalid': (abTestForm.get('variationConversions')?.invalid && (abTestForm.get('variationConversions')?.dirty || abTestForm.get('variationConversions')?.touched)) || abTestForm.hasError('variationConversionsTooLarge')}">
+                <div class="form-text">Number of successful conversions in variation group</div>
+                <div class="invalid-feedback" *ngIf="abTestForm.get('variationConversions')?.errors?.['required']">
+                  Conversions count is required
+                </div>
+                <div class="invalid-feedback" *ngIf="abTestForm.get('variationConversions')?.errors?.['min']">
+                  Conversions cannot be negative
+                </div>
+                <div class="invalid-feedback" *ngIf="abTestForm.hasError('variationConversionsTooLarge')">
+                  Conversions cannot exceed sample size
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="abTestForm.invalid">Calculate Results</button>
+    </form>
+  </div>
+</div>
