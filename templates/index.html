@@ -1,0 +1,246 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title mb-0">A/B Test Statistical Significance Calculator</h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">
+                    Enter your A/B test data to calculate statistical significance, confidence intervals, and effect sizes.
+                </p>
+                <p>
+                    This calculator helps determine if your A/B test results represent a genuine difference between variants
+                    or if they might be due to random chance.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="card-title mb-0">Test Data Input</h4>
+            </div>
+            <div class="card-body">
+                <form id="ab-test-form">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="card bg-secondary">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Control Group (A)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="control-size" class="form-label">Sample Size</label>
+                                        <input type="number" class="form-control" id="control-size" placeholder="e.g., 1000" min="1" required>
+                                        <div class="form-text">Total number of users/sessions in control group</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="control-conversions" class="form-label">Conversions</label>
+                                        <input type="number" class="form-control" id="control-conversions" placeholder="e.g., 150" min="0" required>
+                                        <div class="form-text">Number of successful conversions in control group</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-secondary">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Variation Group (B)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="variation-size" class="form-label">Sample Size</label>
+                                        <input type="number" class="form-control" id="variation-size" placeholder="e.g., 1000" min="1" required>
+                                        <div class="form-text">Total number of users/sessions in variation group</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="variation-conversions" class="form-label">Conversions</label>
+                                        <input type="number" class="form-control" id="variation-conversions" placeholder="e.g., 180" min="0" required>
+                                        <div class="form-text">Number of successful conversions in variation group</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calculate Results</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="card-title mb-0">Statistical Concepts</h4>
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="accordionConcepts">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                Statistical Significance
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionConcepts">
+                            <div class="accordion-body">
+                                <p>Statistical significance indicates whether an observed difference between test variants is likely to be real or due to random chance. A p-value less than 0.05 (5%) is commonly used as the threshold for significance, meaning there's less than a 5% probability that the difference occurred by chance.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Confidence Intervals
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionConcepts">
+                            <div class="accordion-body">
+                                <p>A confidence interval provides a range of values within which the true value is likely to fall with a specified level of confidence (typically 95%). Wider intervals indicate less precision in estimates, while narrower intervals suggest more precise measurements.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Effect Size
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionConcepts">
+                            <div class="accordion-body">
+                                <p>Effect size measures the magnitude of the difference between groups. While statistical significance tells you if a difference exists, effect size tells you how big and meaningful that difference is. Cohen's h is used for proportions and has these common interpretations:</p>
+                                <ul>
+                                    <li>Small effect: h ≈ 0.2</li>
+                                    <li>Medium effect: h ≈ 0.5</li>
+                                    <li>Large effect: h ≈ 0.8</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <!-- Results section, initially hidden -->
+        <div id="results-section" class="d-none">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">Test Results</h4>
+                </div>
+                <div class="card-body">
+                    <div id="significance-alert" class="alert mb-4" role="alert">
+                        <!-- Will be populated with JS -->
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-dark">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Control (A)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="display-4 text-center mb-0" id="control-rate">-</p>
+                                    <p class="text-center text-muted mb-3">Conversion Rate</p>
+                                    <p class="text-center mb-0" id="control-ci">95% CI: [-]</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-dark">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Variation (B)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="display-4 text-center mb-0" id="variation-rate">-</p>
+                                    <p class="text-center text-muted mb-3">Conversion Rate</p>
+                                    <p class="text-center mb-0" id="variation-ci">95% CI: [-]</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mb-3">Conversion Rate Comparison</h5>
+                    <div style="height: 250px">
+                        <canvas id="conversion-chart"></canvas>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card bg-dark mb-3">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Difference</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-sm">
+                                        <tbody>
+                                            <tr>
+                                                <td>Absolute</td>
+                                                <td id="absolute-diff" class="text-end">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Relative</td>
+                                                <td id="relative-diff" class="text-end">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>95% CI</td>
+                                                <td id="diff-ci" class="text-end">-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-dark mb-3">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Statistical Tests</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-sm">
+                                        <tbody>
+                                            <tr>
+                                                <td>Z-Score</td>
+                                                <td id="z-score" class="text-end">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>P-Value</td>
+                                                <td id="p-value" class="text-end">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Effect Size</td>
+                                                <td id="effect-size" class="text-end">-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="sample-size-recommendation" class="d-none mt-3 alert alert-info">
+                        <!-- Will be populated with JS if needed -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading indicator -->
+        <div id="loading-indicator" class="d-none text-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Calculating results...</p>
+        </div>
+        
+        <!-- Error alert -->
+        <div id="error-alert" class="d-none alert alert-danger mt-3" role="alert">
+            <!-- Will be populated with JS -->
+        </div>
+    </div>
+</div>
+{% endblock %}
