@@ -25,15 +25,15 @@ cat > frontend/dist/frontend/index.html << 'EOL'
     <!-- Professional UI Styling -->
     <style>
         :root {
-            --primary-color: #6366f1;
-            --primary-hover: #4f46e5;
-            --primary-light: #a5b4fc;
-            --secondary-color: #06b6d4;
+            --primary-color: #1e40af;
+            --primary-hover: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary-color: #0f766e;
             --success-color: #059669;
             --warning-color: #d97706;
             --danger-color: #dc2626;
-            --info-color: #0284c7;
-            --accent-color: #ec4899;
+            --info-color: #0369a1;
+            --accent-color: #7c3aed;
             --bg-primary: #fefefe;
             --bg-secondary: #f8fafc;
             --bg-accent: #f1f5f9;
@@ -200,7 +200,7 @@ cat > frontend/dist/frontend/index.html << 'EOL'
 
         /* Hero section */
         .hero-section {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--accent-color) 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
             border-radius: var(--border-radius);
             margin-bottom: 2rem;
@@ -215,14 +215,16 @@ cat > frontend/dist/frontend/index.html << 'EOL'
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
             pointer-events: none;
         }
 
         .hero-title {
             color: white;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            font-size: 2.75rem;
+            letter-spacing: -0.025em;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         /* Metric cards */
@@ -376,7 +378,7 @@ cat > frontend/dist/frontend/index.html << 'EOL'
         }
 
         .metric-icon.accent {
-            background: linear-gradient(135deg, var(--accent-color), #be185d);
+            background: linear-gradient(135deg, var(--accent-color), #5b21b6);
             color: white;
         }
 
@@ -400,17 +402,17 @@ cat > frontend/dist/frontend/index.html << 'EOL'
         <!-- Hero Section -->
         <div class="hero-section">
             <div class="card-body text-center py-5">
-                <h1 class="hero-title display-3 mb-4">A/B Test Statistical Significance Calculator</h1>
+                <h1 class="hero-title mb-4">Statistical Significance Testing Platform</h1>
                 <p class="lead mb-4" style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem;">
-                    Professional statistical analysis for your A/B test results with confidence intervals, p-values, and effect sizes
+                    Enterprise-grade A/B test analysis with comprehensive statistical metrics and confidence intervals
                 </p>
                 <div class="row text-center mt-4">
                     <div class="col-md-4">
                         <div class="d-flex align-items-center justify-content-center mb-2">
                             <div class="metric-icon primary me-3">
-                                <i class="fas fa-calculator"></i>
+                                <i class="fas fa-chart-line"></i>
                             </div>
-                            <span style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Statistical Analysis</span>
+                            <span style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Statistical Testing</span>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -418,15 +420,15 @@ cat > frontend/dist/frontend/index.html << 'EOL'
                             <div class="metric-icon info me-3">
                                 <i class="fas fa-chart-bar"></i>
                             </div>
-                            <span style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Visual Charts</span>
+                            <span style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Data Visualization</span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="d-flex align-items-center justify-content-center mb-2">
-                            <div class="metric-icon success me-3">
-                                <i class="fas fa-lightbulb"></i>
+                            <div class="metric-icon accent me-3">
+                                <i class="fas fa-microscope"></i>
                             </div>
-                            <span style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Smart Insights</span>
+                            <span style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Research Analytics</span>
                         </div>
                     </div>
                 </div>
