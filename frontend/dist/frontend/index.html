@@ -14,60 +14,299 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- Custom CSS -->
+    <!-- Custom CSS for Modern UI -->
     <style>
-        /* Add some space between form elements */
-        .mb-3 {
-            margin-bottom: 1.5rem;
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            --border-radius: 16px;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
-        
-        /* Improve readability of display numbers */
-        .display-4 {
-            font-size: 2.5rem;
+
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        /* Glass morphism navbar */
+        .navbar {
+            background: rgba(30, 60, 114, 0.8) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Modern card styling */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--hover-shadow);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            background: transparent;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+        }
+
+        /* Modern input styling */
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            color: #fff;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+            color: #fff;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Gradient buttons */
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
             font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
-        
-        /* Customize chart containers */
-        canvas {
-            width: 100%;
-            height: 100%;
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
         }
-        
-        /* Customize alerts */
-        .alert-heading {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
+
+        /* Alert styling */
+        .alert {
+            border: none;
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--card-shadow);
         }
-        
-        /* Make sure tables don't get too wide */
-        .table-sm td {
-            padding: 0.5rem;
+
+        .alert-success {
+            background: linear-gradient(135deg, rgba(75, 192, 192, 0.3), rgba(79, 172, 254, 0.3));
+            border-left: 4px solid #4facfe;
         }
-        
-        /* Proper form validation styles */
-        .form-control.is-invalid {
-            border-color: var(--bs-danger);
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right calc(.375em + .1875rem) center;
-            background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+
+        .alert-warning {
+            background: linear-gradient(135deg, rgba(255, 154, 158, 0.3), rgba(254, 207, 239, 0.3));
+            border-left: 4px solid #ff9a9e;
         }
-        
-        /* Additional styling for percentages in tables */
-        .text-end {
+
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(245, 87, 108, 0.3), rgba(240, 147, 251, 0.3));
+            border-left: 4px solid #f5576c;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.3), rgba(0, 242, 254, 0.3));
+            border-left: 4px solid #4facfe;
+        }
+
+        /* Display numbers with gradient */
+        .display-4 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: var(--success-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+        }
+
+        /* Chart container styling */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Modern table styling */
+        .table {
+            --bs-table-bg: transparent;
+        }
+
+        .table td {
+            border-color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Accordion styling */
+        .accordion-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px !important;
+            margin-bottom: 8px;
+        }
+
+        .accordion-button {
+            background: transparent;
+            color: #fff;
+            border: none;
+            border-radius: 12px !important;
             font-weight: 500;
         }
-        
-        /* Loading indicator */
+
+        .accordion-button:not(.collapsed) {
+            background: rgba(102, 126, 234, 0.2);
+            color: #fff;
+            box-shadow: none;
+        }
+
+        .accordion-button::after {
+            filter: brightness(0) invert(1);
+        }
+
+        .accordion-body {
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Loading spinner */
         .spinner-border {
             width: 3rem;
             height: 3rem;
+            border-width: 0.3em;
+            color: #667eea;
         }
-        
-        /* Responsive adjustments for small screens */
-        @media (max-width: 576px) {
+
+        /* Footer styling */
+        footer {
+            background: rgba(30, 60, 114, 0.3);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Form labels */
+        .form-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+        }
+
+        /* Hero section */
+        .hero-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* Metrics cards */
+        .metric-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
             .display-4 {
                 font-size: 2rem;
+            }
+            
+            .card {
+                margin-bottom: 1rem;
+            }
+            
+            .hero-section {
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-gradient);
+        }
+
+        /* Animation for results appearance */
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
@@ -82,21 +321,33 @@
         </div>
     </nav>
 
-    <main class="container my-4">
-        <div class="row">
-            <div class="col-lg-12 mb-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title mb-0">A/B Test Statistical Significance Calculator</h3>
+    <main class="container my-5">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="card-body text-center py-5">
+                <h1 class="hero-title display-3 mb-4">A/B Test Statistical Significance Calculator</h1>
+                <p class="lead mb-4" style="color: rgba(255, 255, 255, 0.8); font-size: 1.2rem;">
+                    <i class="fas fa-chart-line me-2"></i>
+                    Discover if your test results are statistically significant with professional-grade analytics
+                </p>
+                <div class="row text-center mt-4">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center justify-content-center mb-2">
+                            <i class="fas fa-calculator me-2" style="color: #667eea; font-size: 1.5rem;"></i>
+                            <span style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Statistical Analysis</span>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p class="lead">
-                            Enter your A/B test data to calculate statistical significance, confidence intervals, and effect sizes.
-                        </p>
-                        <p>
-                            This calculator helps determine if your A/B test results represent a genuine difference between variants
-                            or if they might be due to random chance.
-                        </p>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center justify-content-center mb-2">
+                            <i class="fas fa-chart-bar me-2" style="color: #4facfe; font-size: 1.5rem;"></i>
+                            <span style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Visual Charts</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center justify-content-center mb-2">
+                            <i class="fas fa-lightbulb me-2" style="color: #f093fb; font-size: 1.5rem;"></i>
+                            <span style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Smart Insights</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -246,31 +497,37 @@
                                 </div>
                             </div>
                             
-                            <h5 class="mb-3">Conversion Rate Comparison</h5>
-                            <div style="height: 250px">
+                            <h5 class="mb-3">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Conversion Rate Comparison
+                            </h5>
+                            <div class="chart-container" style="height: 250px">
                                 <canvas id="conversion-chart"></canvas>
                             </div>
                             
                             <div class="row mt-4">
                                 <div class="col-md-6">
-                                    <div class="card bg-dark mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Difference</h5>
+                                    <div class="metric-card mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-chart-line me-2" style="color: #4facfe;"></i>
+                                                Difference
+                                            </h5>
                                         </div>
-                                        <div class="card-body">
+                                        <div class="table-responsive">
                                             <table class="table table-sm">
                                                 <tbody>
                                                     <tr>
-                                                        <td>Absolute</td>
-                                                        <td id="absolute-diff" class="text-end">-</td>
+                                                        <td style="color: rgba(255, 255, 255, 0.8);">Absolute</td>
+                                                        <td id="absolute-diff" class="text-end fw-bold">-</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Relative</td>
-                                                        <td id="relative-diff" class="text-end">-</td>
+                                                        <td style="color: rgba(255, 255, 255, 0.8);">Relative</td>
+                                                        <td id="relative-diff" class="text-end fw-bold">-</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>95% CI</td>
-                                                        <td id="diff-ci" class="text-end">-</td>
+                                                        <td style="color: rgba(255, 255, 255, 0.8);">95% CI</td>
+                                                        <td id="diff-ci" class="text-end fw-bold">-</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -278,24 +535,27 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="card bg-dark mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Statistical Tests</h5>
+                                    <div class="metric-card mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-flask me-2" style="color: #f093fb;"></i>
+                                                Statistical Tests
+                                            </h5>
                                         </div>
-                                        <div class="card-body">
+                                        <div class="table-responsive">
                                             <table class="table table-sm">
                                                 <tbody>
                                                     <tr>
-                                                        <td>Z-Score</td>
-                                                        <td id="z-score" class="text-end">-</td>
+                                                        <td style="color: rgba(255, 255, 255, 0.8);">Z-Score</td>
+                                                        <td id="z-score" class="text-end fw-bold">-</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>P-Value</td>
-                                                        <td id="p-value" class="text-end">-</td>
+                                                        <td style="color: rgba(255, 255, 255, 0.8);">P-Value</td>
+                                                        <td id="p-value" class="text-end fw-bold">-</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Effect Size</td>
-                                                        <td id="effect-size" class="text-end">-</td>
+                                                        <td style="color: rgba(255, 255, 255, 0.8);">Effect Size</td>
+                                                        <td id="effect-size" class="text-end fw-bold">-</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -557,8 +817,10 @@
 
         // Display test results
         function displayResults(results) {
-            // Show results section
-            document.getElementById('results-section').classList.remove('d-none');
+            // Show results section with animation
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.classList.remove('d-none');
+            resultsSection.classList.add('fade-in');
             
             // Basic results
             document.getElementById('control-rate').textContent = formatPercent(results.control.conversion_rate, 2);
