@@ -11,7 +11,9 @@ angular_dist_folder = os.path.join(os.getcwd(), 'frontend', 'dist', 'frontend')
 
 # Create Flask app
 app = Flask(__name__, static_folder=angular_dist_folder)
-app.secret_key = os.environ.get("SESSION_SECRET", "default-secret-key-for-development")
+app.secret_key = os.environ.get("SESSION_SECRET",
+                                "default-secret-key-for-development")
+
 
 @app.route('/api/calculate', methods=['POST'])
 def calculate():
@@ -28,49 +30,40 @@ def calculate():
     """
     try:
         data = request.get_json()
-        
+        print(data)
         # Extract values
         control_size = int(data.get('control_size', 0))
         control_conversions = int(data.get('control_conversions', 0))
         variation_size = int(data.get('variation_size', 0))
         variation_conversions = int(data.get('variation_conversions', 0))
-        
+
         # Validate inputs
         if control_size <= 0 or variation_size <= 0:
-            return jsonify({
-                'error': 'Sample sizes must be positive numbers'
-            }), 400
-            
+            return jsonify({'error':
+                            'Sample sizes must be positive numbers'}), 400
+
         if control_conversions < 0 or variation_conversions < 0:
-            return jsonify({
-                'error': 'Conversion counts cannot be negative'
-            }), 400
-            
+            return jsonify({'error':
+                            'Conversion counts cannot be negative'}), 400
+
         if control_conversions > control_size or variation_conversions > variation_size:
-            return jsonify({
-                'error': 'Conversion counts cannot exceed sample sizes'
-            }), 400
-        
+            return jsonify(
+                {'error': 'Conversion counts cannot exceed sample sizes'}), 400
+
         # Calculate results
-        results = calculate_ab_test_results(
-            control_size, 
-            control_conversions,
-            variation_size,
-            variation_conversions
-        )
-        
+        results = calculate_ab_test_results(control_size, control_conversions,
+                                            variation_size,
+                                            variation_conversions)
+        print(results)
         return jsonify(results)
-        
+
     except ValueError as e:
         app.logger.error(f"Value error in calculation: {str(e)}")
-        return jsonify({
-            'error': f'Invalid input values: {str(e)}'
-        }), 400
+        return jsonify({'error': f'Invalid input values: {str(e)}'}), 400
     except Exception as e:
         app.logger.error(f"Error in calculation: {str(e)}")
-        return jsonify({
-            'error': 'An error occurred during calculation'
-        }), 500
+        return jsonify({'error': 'An error occurred during calculation'}), 500
+
 
 # Serve Angular frontend
 @app.route('/')
@@ -93,6 +86,7 @@ def serve_angular(path=''):
                 </body>
             </html>
             """
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

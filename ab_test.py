@@ -88,43 +88,43 @@ def calculate_ab_test_results(control_size, control_conversions, variation_size,
     
     return {
         "control": {
-            "sample_size": control_size,
-            "conversions": control_conversions,
-            "conversion_rate": control_rate,
-            "ci_lower": max(0, ci_control_lower),
-            "ci_upper": min(1, ci_control_upper)
+            "sample_size": int(control_size),
+            "conversions": int(control_conversions),
+            "conversion_rate": float(control_rate),
+            "ci_lower": float(max(0, ci_control_lower)),
+            "ci_upper": float(min(1, ci_control_upper))
         },
         "variation": {
-            "sample_size": variation_size,
-            "conversions": variation_conversions,
-            "conversion_rate": variation_rate,
-            "ci_lower": max(0, ci_variation_lower),
-            "ci_upper": min(1, ci_variation_upper)
+            "sample_size": int(variation_size),
+            "conversions": int(variation_conversions),
+            "conversion_rate": float(variation_rate),
+            "ci_lower": float(max(0, ci_variation_lower)),
+            "ci_upper": float(min(1, ci_variation_upper))
         },
         "difference": {
-            "absolute": absolute_difference,
-            "relative": relative_difference,
-            "ci_lower": ci_lower,
-            "ci_upper": ci_upper
+            "absolute": float(absolute_difference),
+            "relative": float(relative_difference),
+            "ci_lower": float(ci_lower),
+            "ci_upper": float(ci_upper)
         },
         "statistical_tests": {
             "chi_square": {
-                "statistic": chi2,
-                "p_value": p_chi2,
-                "degrees_of_freedom": dof
+                "statistic": float(chi2),
+                "p_value": float(p_chi2),
+                "degrees_of_freedom": int(dof)
             },
             "z_test": {
-                "z_score": z_score,
-                "p_value": p_value_z
+                "z_score": float(z_score),
+                "p_value": float(p_value_z)
             }
         },
         "effect_size": {
-            "cohens_h": h,
-            "interpretation": effect_size_interpretation
+            "cohens_h": float(h),
+            "interpretation": str(effect_size_interpretation)
         },
         "results": {
-            "is_significant": is_significant,
+            "is_significant": bool(is_significant),
             "confidence_level": 95,
-            "recommended_sample_size": recommended_sample if not is_significant else 0
+            "recommended_sample_size": int(recommended_sample if not is_significant else 0)
         }
     }
