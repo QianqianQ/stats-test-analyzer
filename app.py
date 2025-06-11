@@ -1,13 +1,16 @@
 import os
 import logging
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, send_from_directory
 from ab_test import calculate_ab_test_results
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
+# Define path to Angular dist directory
+angular_dist_folder = os.path.join(os.getcwd(), 'frontend', 'dist', 'ab-test-frontend')
+
 # Create Flask app
-app = Flask(__name__)
+app = Flask(__name__, static_folder=angular_dist_folder)
 app.secret_key = os.environ.get("SESSION_SECRET",
                                 "default-secret-key-for-development")
 
@@ -62,10 +65,29 @@ def calculate():
         return jsonify({'error': 'An error occurred during calculation'}), 500
 
 
-@app.route('/')
-def index():
-    """Serve the main application page"""
-    return render_template('index.html')
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_angular(path=''):
+    """Serve the Angular app for all routes"""
+    try:
+        if path != "" and os.path.exists(os.path.join(angular_dist_folder, path)):
+            return send_from_directory(angular_dist_folder, path)
+        else:
+            if os.path.exists(os.path.join(angular_dist_folder, 'index.html')):
+                return send_from_directory(angular_dist_folder, 'index.html')
+            else:
+                return """
+                <html>
+                    <head><title>A/B Test Calculator</title></head>
+                    <body>
+                        <h1>Angular frontend not built yet</h1>
+                        <p>Run 'cd frontend && npm install && npm run build' to build the Angular frontend.</p>
+                    </body>
+                </html>
+                """
+    except Exception as e:
+        logging.error(f"Error serving file: {e}")
+        return "Error loading application", 500
 
 
 if __name__ == '__main__':
