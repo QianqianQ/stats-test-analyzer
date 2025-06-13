@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
 import { AbTestFormComponent } from './components/ab-test-form/ab-test-form.component';
 import { AbTestResultsComponent } from './components/ab-test-results/ab-test-results.component';
 import { StatisticalConceptsComponent } from './components/statistical-concepts/statistical-concepts.component';
