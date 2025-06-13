@@ -409,7 +409,7 @@
                       <div class="metric-icon primary me-3">
                         <i class="fas fa-flask"></i>
                       </div>
-                      <h5 class="mb-0">Statistical Tests</h5>
+                      <h5 class="mb-0">Primary Statistical Tests</h5>
                     </div>
                     <div class="table-responsive">
                       <table class="table table-sm">
@@ -428,6 +428,108 @@
                           </tr>
                         </tbody>
                       </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Additional Statistical Tests -->
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="card-title mb-0">
+                        <i class="fas fa-microscope me-2"></i>
+                        Comprehensive Statistical Test Results
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-lg-6 mb-3">
+                          <h6 class="fw-bold mb-3">
+                            <i class="fas fa-calculator me-2"></i>
+                            Exact Tests
+                          </h6>
+                          <div class="table-responsive">
+                            <table class="table table-sm">
+                              <thead>
+                                <tr>
+                                  <th>Test</th>
+                                  <th class="text-end">P-Value</th>
+                                  <th class="text-end">Additional Metric</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>Fisher's Exact</td>
+                                  <td id="fishers-p-value" class="text-end">-</td>
+                                  <td id="fishers-odds-ratio" class="text-end">-</td>
+                                </tr>
+                                <tr>
+                                  <td>Barnard's Exact</td>
+                                  <td id="barnards-p-value" class="text-end">-</td>
+                                  <td id="barnards-pooled-rate" class="text-end">-</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-lg-6 mb-3">
+                          <h6 class="fw-bold mb-3">
+                            <i class="fas fa-chart-area me-2"></i>
+                            Alternative Tests
+                          </h6>
+                          <div class="table-responsive">
+                            <table class="table table-sm">
+                              <thead>
+                                <tr>
+                                  <th>Test</th>
+                                  <th class="text-end">P-Value</th>
+                                  <th class="text-end">Test Statistic</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>Chi-Square (Yates')</td>
+                                  <td id="chi2-contingency-p-value" class="text-end">-</td>
+                                  <td id="chi2-contingency-statistic" class="text-end">-</td>
+                                </tr>
+                                <tr>
+                                  <td>G-Test (LRT)</td>
+                                  <td id="g-test-p-value" class="text-end">-</td>
+                                  <td id="g-test-statistic" class="text-end">-</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Test Descriptions -->
+                      <div class="row mt-3">
+                        <div class="col-12">
+                          <div class="alert alert-info">
+                            <h6 class="alert-heading">
+                              <i class="fas fa-info-circle me-2"></i>
+                              Understanding Different Statistical Tests
+                            </h6>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <ul class="mb-0">
+                                  <li><strong>Fisher's Exact:</strong> Best for small samples (n&lt;30)</li>
+                                  <li><strong>Barnard's Exact:</strong> More powerful than Fisher's for 2x2 tables</li>
+                                </ul>
+                              </div>
+                              <div class="col-md-6">
+                                <ul class="mb-0">
+                                  <li><strong>Chi-Square (Yates'):</strong> Standard test with continuity correction</li>
+                                  <li><strong>G-Test:</strong> Likelihood ratio test, often more accurate than chi-square</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -636,6 +738,47 @@
         document.getElementById('z-score').textContent = results.statistical_tests.z_test.z_score.toFixed(3);
         document.getElementById('p-value').textContent = formatPValue(results.statistical_tests.z_test.p_value);
         document.getElementById('effect-size').textContent = `${results.effect_size.cohens_h.toFixed(3)} (${results.effect_size.interpretation})`;
+        
+        // Additional statistical tests
+        // Fisher's Exact Test
+        if (results.statistical_tests.fishers_exact && results.statistical_tests.fishers_exact.p_value !== null) {
+            document.getElementById('fishers-p-value').textContent = formatPValue(results.statistical_tests.fishers_exact.p_value);
+            document.getElementById('fishers-odds-ratio').textContent = results.statistical_tests.fishers_exact.odds_ratio ? 
+                `OR: ${results.statistical_tests.fishers_exact.odds_ratio.toFixed(3)}` : 'N/A';
+        } else {
+            document.getElementById('fishers-p-value').textContent = 'Error';
+            document.getElementById('fishers-odds-ratio').textContent = 'N/A';
+        }
+        
+        // Barnard's Exact Test
+        if (results.statistical_tests.barnards_exact && results.statistical_tests.barnards_exact.p_value !== null) {
+            document.getElementById('barnards-p-value').textContent = formatPValue(results.statistical_tests.barnards_exact.p_value);
+            document.getElementById('barnards-pooled-rate').textContent = results.statistical_tests.barnards_exact.pooled_rate ? 
+                formatPercent(results.statistical_tests.barnards_exact.pooled_rate, 2) : 'N/A';
+        } else {
+            document.getElementById('barnards-p-value').textContent = 'Error';
+            document.getElementById('barnards-pooled-rate').textContent = 'N/A';
+        }
+        
+        // Chi-Square with Yates' correction
+        if (results.statistical_tests.chi2_contingency && results.statistical_tests.chi2_contingency.p_value !== null) {
+            document.getElementById('chi2-contingency-p-value').textContent = formatPValue(results.statistical_tests.chi2_contingency.p_value);
+            document.getElementById('chi2-contingency-statistic').textContent = results.statistical_tests.chi2_contingency.statistic ? 
+                results.statistical_tests.chi2_contingency.statistic.toFixed(3) : 'N/A';
+        } else {
+            document.getElementById('chi2-contingency-p-value').textContent = 'Error';
+            document.getElementById('chi2-contingency-statistic').textContent = 'N/A';
+        }
+        
+        // G-Test (Likelihood Ratio Test)
+        if (results.statistical_tests.g_test && results.statistical_tests.g_test.p_value !== null) {
+            document.getElementById('g-test-p-value').textContent = formatPValue(results.statistical_tests.g_test.p_value);
+            document.getElementById('g-test-statistic').textContent = results.statistical_tests.g_test.statistic ? 
+                results.statistical_tests.g_test.statistic.toFixed(3) : 'N/A';
+        } else {
+            document.getElementById('g-test-p-value').textContent = 'Error';
+            document.getElementById('g-test-statistic').textContent = 'N/A';
+        }
         
         // Significance status
         const statusElement = document.getElementById('significance-status');

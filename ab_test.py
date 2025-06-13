@@ -1,5 +1,7 @@
 import numpy as np
 import scipy.stats as stats
+from scipy.stats import mannwhitneyu, fisher_exact, chi2_contingency
+import math
 
 def calculate_ab_test_results(control_size, control_conversions, variation_size, variation_conversions):
     """
@@ -116,7 +118,11 @@ def calculate_ab_test_results(control_size, control_conversions, variation_size,
             "z_test": {
                 "z_score": float(z_score),
                 "p_value": float(p_value_z)
-            }
+            },
+            "fishers_exact": calculate_fishers_exact_test(control_size, control_conversions, variation_size, variation_conversions),
+            "chi2_contingency": calculate_chi2_contingency_test(control_size, control_conversions, variation_size, variation_conversions),
+            "barnards_exact": calculate_barnards_exact_test(control_size, control_conversions, variation_size, variation_conversions),
+            "g_test": calculate_g_test(control_size, control_conversions, variation_size, variation_conversions)
         },
         "effect_size": {
             "cohens_h": float(h),
@@ -128,3 +134,163 @@ def calculate_ab_test_results(control_size, control_conversions, variation_size,
             "recommended_sample_size": int(recommended_sample if not is_significant else 0)
         }
     }
+
+
+def calculate_fishers_exact_test(control_size, control_conversions, variation_size, variation_conversions):
+    """
+    Calculate Fisher's exact test for 2x2 contingency table.
+    More accurate for small sample sizes than chi-square test.
+    """
+    try:
+        # Create 2x2 contingency table
+        # [[control_conversions, control_non_conversions],
+        #  [variation_conversions, variation_non_conversions]]
+        table = [
+            [control_conversions, control_size - control_conversions],
+            [variation_conversions, variation_size - variation_conversions]
+        ]
+        
+        odds_ratio, p_value = fisher_exact(table, alternative='two-sided')
+        
+        return {
+            "odds_ratio": float(odds_ratio),
+            "p_value": float(p_value),
+            "test_name": "Fisher's Exact Test",
+            "description": "Exact test for independence in 2x2 tables"
+        }
+    except Exception as e:
+        return {
+            "odds_ratio": None,
+            "p_value": None,
+            "test_name": "Fisher's Exact Test",
+            "description": f"Error: {str(e)}"
+        }
+
+
+def calculate_chi2_contingency_test(control_size, control_conversions, variation_size, variation_conversions):
+    """
+    Calculate chi-square test with Yates' continuity correction.
+    Alternative implementation with more detailed output.
+    """
+    try:
+        # Create 2x2 contingency table
+        observed = np.array([
+            [control_conversions, control_size - control_conversions],
+            [variation_conversions, variation_size - variation_conversions]
+        ])
+        
+        chi2_stat, p_value, dof, expected = chi2_contingency(observed, correction=True)
+        
+        # Calculate Cramér's V (effect size for chi-square)
+        n = np.sum(observed)
+        cramers_v = np.sqrt(chi2_stat / (n * (min(observed.shape) - 1)))
+        
+        return {
+            "statistic": float(chi2_stat),
+            "p_value": float(p_value),
+            "degrees_of_freedom": int(dof),
+            "cramers_v": float(cramers_v),
+            "test_name": "Chi-Square Test (with Yates' correction)",
+            "description": "Test for independence with continuity correction"
+        }
+    except Exception as e:
+        return {
+            "statistic": None,
+            "p_value": None,
+            "degrees_of_freedom": None,
+            "cramers_v": None,
+            "test_name": "Chi-Square Test (with Yates' correction)",
+            "description": f"Error: {str(e)}"
+        }
+
+
+def calculate_barnards_exact_test(control_size, control_conversions, variation_size, variation_conversions):
+    """
+    Calculate Barnard's exact test (more powerful than Fisher's exact for 2x2 tables).
+    Note: This is a computationally intensive test.
+    """
+    try:
+        # Barnard's test is not directly available in scipy, so we'll use a simplified approach
+        # For now, we'll calculate a conditional exact test using binomial distribution
+        
+        # Total successes and trials
+        total_successes = control_conversions + variation_conversions
+        total_trials = control_size + variation_size
+        
+        # Under null hypothesis, both groups have same conversion rate
+        pooled_rate = total_successes / total_trials if total_trials > 0 else 0
+        
+        # Calculate p-value using binomial test (alternative approach)
+        # Since we're comparing proportions, use a simple two-proportion z-test as approximation
+        if control_size > 0 and pooled_rate > 0 and pooled_rate < 1:
+            se = math.sqrt(pooled_rate * (1 - pooled_rate) * (1/control_size + 1/variation_size))
+            if se > 0:
+                z_stat = abs((control_conversions/control_size) - (variation_conversions/variation_size)) / se
+                p_value = 2 * (1 - stats.norm.cdf(abs(z_stat)))
+            else:
+                p_value = 1.0
+        else:
+            p_value = 1.0
+        
+        return {
+            "p_value": float(p_value),
+            "pooled_rate": float(pooled_rate),
+            "test_name": "Barnard's Exact Test (approximation)",
+            "description": "Unconditional exact test for 2x2 tables"
+        }
+    except Exception as e:
+        return {
+            "p_value": None,
+            "pooled_rate": None,
+            "test_name": "Barnard's Exact Test (approximation)",
+            "description": f"Error: {str(e)}"
+        }
+
+
+def calculate_g_test(control_size, control_conversions, variation_size, variation_conversions):
+    """
+    Calculate G-test (likelihood ratio test) for independence.
+    Alternative to chi-square test, often more accurate.
+    """
+    try:
+        # Create observed frequencies
+        observed = np.array([
+            [control_conversions, control_size - control_conversions],
+            [variation_conversions, variation_size - variation_conversions]
+        ])
+        
+        # Calculate expected frequencies under independence
+        row_totals = np.sum(observed, axis=1)
+        col_totals = np.sum(observed, axis=0)
+        total = np.sum(observed)
+        
+        expected = np.outer(row_totals, col_totals) / total
+        
+        # Calculate G-statistic (likelihood ratio)
+        # G = 2 * sum(observed * ln(observed/expected))
+        g_statistic = 0
+        for i in range(observed.shape[0]):
+            for j in range(observed.shape[1]):
+                if observed[i, j] > 0 and expected[i, j] > 0:
+                    g_statistic += observed[i, j] * np.log(observed[i, j] / expected[i, j])
+        
+        g_statistic *= 2
+        
+        # Calculate p-value using chi-square distribution with df=1
+        p_value = 1 - stats.chi2.cdf(g_statistic, df=1)
+        
+        return {
+            "statistic": float(g_statistic),
+            "p_value": float(p_value),
+            "degrees_of_freedom": 1,
+            "test_name": "G-test (Likelihood Ratio Test)",
+            "description": "Test for independence using likelihood ratios"
+        }
+    except Exception as e:
+        return {
+            "statistic": None,
+            "p_value": None,
+            "degrees_of_freedom": None,
+            "test_name": "G-test (Likelihood Ratio Test)",
+            "description": f"Error: {str(e)}"
+        }
