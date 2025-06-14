@@ -28,11 +28,11 @@ This is a full-stack web application for performing statistical significance tes
 ## Key Components
 
 ### Backend Components
-1. **Statistical Engine** (`ab_test.py`): Core statistical calculations including:
-   - Conversion rate analysis
-   - Chi-square and Z-test implementations
-   - Confidence interval calculations
-   - Effect size measurements
+1. **Statistical Engine** (`statistical_analysis.py`): Comprehensive statistical test suite including:
+   - A/B testing, Fisher's Exact Test, Barnard's Exact Test
+   - Chi-square with Yates' correction and G-test for likelihood ratios
+   - Z-test for proportions and confidence interval calculations
+   - Effect size measurements (Cohen's h) and advanced statistical metrics
 
 2. **API Layer** (`app.py`): Flask application with:
    - JSON API endpoint for calculations
@@ -88,6 +88,7 @@ The deployment uses a parallel workflow that starts the Gunicorn server with aut
 
 ## Changelog
 
+- June 14, 2025. Renamed ab_test.py to statistical_analysis.py to reflect comprehensive test suite
 - June 14, 2025. Upgraded to Python 3.12.7 with latest NumPy (2.2.5) and SciPy (1.15.3)
 - June 13, 2025. Initial setup
 

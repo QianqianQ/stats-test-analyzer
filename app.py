@@ -1,7 +1,7 @@
 import os
 import logging
 from flask import Flask, request, jsonify, send_from_directory
-from ab_test import calculate_ab_test_results
+from statistical_analysis import calculate_ab_test_results
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
