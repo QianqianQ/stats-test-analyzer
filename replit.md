@@ -7,7 +7,7 @@ This is a full-stack web application for performing statistical significance tes
 ## System Architecture
 
 ### Backend Architecture
-- **Framework**: Flask (Python 3.11)
+- **Framework**: Flask (Python 3.12)
 - **Scientific Computing**: NumPy and SciPy for statistical calculations
 - **Web Server**: Gunicorn for production deployment
 - **API Design**: RESTful JSON API with single calculation endpoint
@@ -21,7 +21,7 @@ This is a full-stack web application for performing statistical significance tes
 
 ### Deployment Strategy
 - **Platform**: Replit with autoscale deployment
-- **Runtime**: Multi-language environment (Python 3.11 + Node.js 20)
+- **Runtime**: Multi-language environment (Python 3.12 + Node.js 20)
 - **Process Management**: Gunicorn with port binding and reloading
 - **Static Assets**: Angular build output served by Flask
 
@@ -88,6 +88,7 @@ The deployment uses a parallel workflow that starts the Gunicorn server with aut
 
 ## Changelog
 
+- June 14, 2025. Upgraded to Python 3.12.7 with latest NumPy (2.2.5) and SciPy (1.15.3)
 - June 13, 2025. Initial setup
 
 ## User Preferences
