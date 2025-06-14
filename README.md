@@ -78,7 +78,7 @@ This is a full-stack web application for performing statistical significance tes
 ## Deployment Strategy
 
 The application is configured for deployment on Replit with:
-- **Multi-runtime Environment**: Python 3.11 and Node.js 20 support
+- **Multi-runtime Environment**: Python 3.12 and Node.js 20 support
 - **Autoscale Deployment**: Automatic scaling based on traffic
 - **Port Configuration**: Internal port 5000 mapped to external port 80
 - **Process Management**: Gunicorn with reload capabilities for development
