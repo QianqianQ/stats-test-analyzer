@@ -35,7 +35,34 @@ export interface AbTestResults {
     z_test: {
       z_score: number;
       p_value: number;
-    }
+    };
+    fishers_exact: {
+      odds_ratio: number;
+      p_value: number;
+      test_name: string;
+      description: string;
+    };
+    chi2_contingency: {
+      statistic: number;
+      p_value: number;
+      degrees_of_freedom: number;
+      cramers_v: number;
+      test_name: string;
+      description: string;
+    };
+    barnards_exact: {
+      p_value: number;
+      pooled_rate: number;
+      test_name: string;
+      description: string;
+    };
+    g_test: {
+      statistic: number;
+      p_value: number;
+      degrees_of_freedom: number;
+      test_name: string;
+      description: string;
+    };
   };
   effect_size: {
     cohens_h: number;
