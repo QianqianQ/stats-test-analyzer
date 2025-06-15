@@ -7,7 +7,7 @@ from statistical_analysis import calculate_ab_test_results
 logging.basicConfig(level=logging.DEBUG)
 
 # Define path to Angular dist directory
-angular_dist_folder = os.path.join(os.getcwd(), 'frontend', 'dist', 'ab-test-frontend')
+angular_dist_folder = os.path.join(os.getcwd(), 'frontend', 'dist', 'ab-test-frontend', 'browser')
 
 # Create Flask app
 app = Flask(__name__, static_folder=angular_dist_folder)
