@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a full-stack web application for performing statistical significance testing on A/B test data. The platform provides comprehensive statistical analysis including chi-square tests, z-tests, confidence intervals, and effect size measurements. It features a Python Flask backend with NumPy/SciPy for statistical calculations and an Angular 19 frontend with Bootstrap styling.
+This is a full-stack web application designed for performing comprehensive statistical significance testing on A/B test data. The platform combines a Flask-based Python backend with an Angular frontend to provide enterprise-grade statistical analysis capabilities including chi-square tests, z-tests, confidence intervals, and effect size measurements.
 
 ## System Architecture
 
@@ -10,100 +10,109 @@ This is a full-stack web application for performing statistical significance tes
 - **Framework**: Flask (Python 3.11+) with RESTful API design
 - **Scientific Computing**: NumPy and SciPy for advanced statistical calculations
 - **Web Server**: Gunicorn for production deployment with autoscale capabilities
-- **API Design**: Single JSON endpoint (`/api/calculate`) for statistical computations
-- **Static Serving**: Flask serves Angular build artifacts for production deployment
+- **API Design**: Single JSON endpoint (`/api/calculate`) for stateless statistical computations
+- **Static Serving**: Flask serves Angular build artifacts for integrated deployment
 
 ### Frontend Architecture
 - **Framework**: Angular 19 with TypeScript and standalone components
 - **Build System**: Angular CLI with modern application builder
 - **Styling**: SCSS with Bootstrap 5 integration and custom dark theme
+- **Visualization**: Chart.js for statistical data visualization
 - **Components**: Modular architecture with form input, results display, and educational components
 - **HTTP Client**: Angular HttpClient for API communication
 
 ### Data Storage
-- **Current State**: No persistent storage - stateless calculations
-- **Database Ready**: Project structure includes PostgreSQL dependencies for future data persistence
+- **Current State**: Stateless calculations with no persistent storage
+- **Database Ready**: PostgreSQL dependencies included for future data persistence features
 
 ## Key Components
 
 ### Backend Components
-1. **Statistical Engine** (`statistical_analysis.py`): 
-   - A/B testing with multiple statistical tests (Chi-square, Z-test)
-   - Fisher's Exact Test and Barnard's Exact Test support
-   - Confidence interval calculations and effect size measurements (Cohen's h)
-   - Advanced statistical metrics and comprehensive result formatting
+
+1. **Statistical Engine** (`statistical_analysis.py`):
+   - Core statistical calculations for A/B testing
+   - Multiple test methods: Chi-square, Z-test, Fisher's Exact Test
+   - Confidence interval calculations and effect size measurements
+   - Advanced metrics including Cohen's h for effect size interpretation
 
 2. **API Layer** (`app.py`):
-   - Single POST endpoint `/api/calculate` for statistical computations
+   - RESTful endpoint at `/api/calculate` for statistical computations
    - JSON input/output with comprehensive validation
-   - Error handling for invalid inputs and edge cases
-   - Static file serving for Angular frontend integration
+   - Error handling for edge cases and invalid inputs
+   - Integrated static file serving for frontend deployment
 
-3. **Application Entry Point** (`main.py`): Development server configuration
+3. **Application Entry Point** (`main.py`):
+   - Development server configuration
+   - Flask application initialization
 
 ### Frontend Components
-1. **Main Application** (`app.component.ts`): Root component with hero section and navigation
-2. **Form Component** (`ab-test-form.component.ts`): Input interface with validation for A/B test data
-3. **Results Component** (`ab-test-results.component.ts`): Statistical results display with Chart.js visualizations
-4. **Concepts Component** (`statistical-concepts.component.ts`): Educational content about statistical testing
-5. **Service Layer** (`ab-test.service.ts`): HTTP service for API communication
 
-### Data Models
-- **AbTestInput**: Interface for test parameters (sample sizes and conversions)
-- **AbTestResults**: Comprehensive results interface including statistical tests, confidence intervals, and effect sizes
+1. **Main Application** (`app.component.ts`):
+   - Root component with hero section and navigation
+   - Component orchestration and layout management
+
+2. **Form Component** (`ab-test-form.component.ts`):
+   - User input interface with reactive forms
+   - Real-time validation for A/B test data
+   - Input sanitization and error handling
+
+3. **Results Component** (`ab-test-results.component.ts`):
+   - Statistical results visualization with Chart.js
+   - Comprehensive metrics display with confidence intervals
+   - Interactive charts and significance indicators
+
+4. **Educational Component** (`statistical-concepts.component.ts`):
+   - Educational content about statistical concepts
+   - Accordion-style interface for learning resources
 
 ## Data Flow
 
-1. **User Input**: Users enter A/B test data (sample sizes and conversions) via Angular form
-2. **Validation**: Frontend validates inputs before submission
-3. **API Request**: Angular service sends POST request to `/api/calculate`
-4. **Statistical Processing**: Flask backend processes data using NumPy/SciPy
-5. **Results Return**: Comprehensive statistical results returned as JSON
-6. **Visualization**: Angular displays results with charts and statistical interpretations
+1. **User Input**: Users enter A/B test data through the Angular form component
+2. **Validation**: Frontend validates input data before submission
+3. **API Request**: HTTP POST request sent to `/api/calculate` endpoint
+4. **Statistical Processing**: Backend performs comprehensive statistical analysis
+5. **Response**: JSON results returned with all statistical metrics
+6. **Visualization**: Frontend displays results with charts and significance indicators
 
 ## External Dependencies
 
 ### Backend Dependencies
-- **Flask 3.1.1+**: Web framework and API layer
-- **NumPy 2.2.5+**: Numerical computing and array operations
-- **SciPy 1.15.3+**: Advanced statistical functions and tests
-- **Gunicorn 23.0.0+**: Production WSGI server
-- **PostgreSQL (psycopg2-binary)**: Database connectivity (ready for future use)
+- **Flask**: Web framework for API and static serving
+- **NumPy**: Numerical computing for statistical calculations
+- **SciPy**: Advanced statistical functions and tests
+- **Gunicorn**: Production WSGI server
+- **PostgreSQL**: Database support (via psycopg2-binary)
 
 ### Frontend Dependencies
-- **Angular 19.2.14**: Frontend framework and CLI
-- **Bootstrap 5.3.6**: UI component library and styling
-- **Chart.js 4.4.9**: Data visualization and charting
-- **TypeScript 5.8.3**: Type-safe JavaScript development
-- **RxJS 7.8.2**: Reactive programming and HTTP handling
-
-### External CDN Resources
-- **Bootstrap Dark Theme**: Replit-hosted Bootstrap theme
-- **Font Awesome 6.4.0**: Icon library from Cloudflare CDN
+- **Angular 19**: Modern web framework with TypeScript
+- **Bootstrap 5**: UI component library with dark theme
+- **Chart.js**: Data visualization library
+- **RxJS**: Reactive programming for HTTP requests
+- **Font Awesome**: Icon library for UI enhancement
 
 ## Deployment Strategy
 
-### Platform Configuration
-- **Deployment Target**: Replit autoscale with multi-language support
-- **Runtime Environment**: Python 3.11 + Node.js 20 dual environment
-- **Process Management**: Gunicorn with port binding (0.0.0.0:5000) and reload capabilities
-- **Build Process**: Angular production build served by Flask static file handler
-
-### Environment Setup
-- **Nix Packages**: libxcrypt, openssl, pkg-config, postgresql, xsimd
+### Production Deployment
+- **Platform**: Replit autoscale deployment target
+- **Web Server**: Gunicorn with bind to 0.0.0.0:5000
 - **Port Configuration**: Internal port 5000 mapped to external port 80
-- **Development Mode**: Automatic reload enabled for development workflow
+- **Process Management**: Parallel workflow execution with reload capabilities
 
-### Security Considerations
-- Input validation for all statistical parameters
-- CORS handling for API endpoints
-- Secure parameter handling for sensitive configurations
+### Development Environment
+- **Runtime**: Node.js 20 + Python 3.11 hybrid environment
+- **Package Management**: UV for Python dependencies, NPM for frontend
+- **Build Process**: Angular CLI builds to `frontend/dist/ab-test-frontend`
+- **Hot Reload**: Gunicorn reload flag enabled for development
 
 ## Changelog
 
+```
 Changelog:
-- June 14, 2025. Initial setup
+- June 15, 2025. Initial setup
+```
 
 ## User Preferences
 
+```
 Preferred communication style: Simple, everyday language.
+```
