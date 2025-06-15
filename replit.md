@@ -104,6 +104,11 @@ The application is designed for stateless operation currently but includes datab
 ```
 Changelog:
 - June 15, 2025. Initial setup
+- June 15, 2025. Applied deployment fixes:
+  * Updated Python version compatibility (3.11/3.12)
+  * Fixed TypeScript interfaces for statistical tests
+  * Built Angular frontend for production
+  * Configured .gitignore to prevent build artifacts from commits
 ```
 
 ## User Preferences
