@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-statistical-concepts',
@@ -17,7 +19,7 @@ import { CommonModule } from '@angular/common';
         <div class="accordion" id="concepts-accordion">
           <div class="accordion-item">
             <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#statistical-significance">
+              <button class="accordion-button collapsed" type="button" (click)="toggleAccordion('#statistical-significance', $event)" aria-expanded="false">
                 Statistical Significance
               </button>
             </h2>
@@ -35,7 +37,7 @@ import { CommonModule } from '@angular/common';
           
           <div class="accordion-item">
             <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#confidence-intervals">
+              <button class="accordion-button collapsed" type="button" (click)="toggleAccordion('#confidence-intervals', $event)" aria-expanded="false">
                 Confidence Intervals
               </button>
             </h2>
@@ -53,7 +55,7 @@ import { CommonModule } from '@angular/common';
           
           <div class="accordion-item">
             <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#effect-size">
+              <button class="accordion-button collapsed" type="button" (click)="toggleAccordion('#effect-size', $event)" aria-expanded="false">
                 Effect Size
               </button>
             </h2>
@@ -72,7 +74,7 @@ import { CommonModule } from '@angular/common';
           
           <div class="accordion-item">
             <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-target="#statistical-tests">
+              <button class="accordion-button collapsed" type="button" (click)="toggleAccordion('#statistical-tests', $event)" aria-expanded="false">
                 Statistical Test Types
               </button>
             </h2>
@@ -94,6 +96,63 @@ import { CommonModule } from '@angular/common';
     </div>
   `
 })
-export class StatisticalConceptsComponent {
+export class StatisticalConceptsComponent implements AfterViewInit {
+  isExpanded = false;
 
+  constructor(private elementRef: ElementRef) {}
+
+  ngAfterViewInit() {
+    // Initialize Bootstrap accordion manually if needed
+    this.initializeAccordion();
+  }
+
+  private initializeAccordion() {
+    // Ensure Bootstrap is available and initialize accordion
+    if (typeof bootstrap !== 'undefined') {
+      const accordionElement = this.elementRef.nativeElement.querySelector('#concepts-accordion');
+      if (accordionElement) {
+        new bootstrap.Collapse(accordionElement, {
+          toggle: false
+        });
+      }
+    }
+  }
+
+  toggleAccordion(targetId: string, event: Event) {
+    event.preventDefault();
+    const target = this.elementRef.nativeElement.querySelector(targetId);
+    const button = event.target as HTMLElement;
+    
+    if (target) {
+      const isCollapsed = target.classList.contains('show');
+      
+      // Close all other accordion items
+      const allItems = this.elementRef.nativeElement.querySelectorAll('.accordion-collapse');
+      const allButtons = this.elementRef.nativeElement.querySelectorAll('.accordion-button');
+      
+      allItems.forEach((item: HTMLElement) => {
+        if (item !== target) {
+          item.classList.remove('show');
+        }
+      });
+      
+      allButtons.forEach((btn: HTMLElement) => {
+        if (btn !== button) {
+          btn.classList.add('collapsed');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Toggle current item
+      if (isCollapsed) {
+        target.classList.remove('show');
+        button.classList.add('collapsed');
+        button.setAttribute('aria-expanded', 'false');
+      } else {
+        target.classList.add('show');
+        button.classList.remove('collapsed');
+        button.setAttribute('aria-expanded', 'true');
+      }
+    }
+  }
 }

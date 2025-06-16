@@ -91,6 +91,21 @@ A full-stack web application for performing comprehensive statistical significan
 ## Changelog
 
 - June 15, 2025. Initial setup
+- June 15, 2025. Applied deployment fixes:
+  * Updated Python version compatibility (3.11/3.12)
+  * Fixed TypeScript interfaces for statistical tests
+  * Built Angular frontend for production
+  * Configured .gitignore to prevent build artifacts from commits
+- June 16, 2025. Fixed Angular frontend serving:
+  * Corrected Flask static folder path to point to browser subdirectory
+  * Confirmed Angular application loads successfully
+- June 16, 2025. Modernized frontend design:
+  * Implemented vibrant color palette with purple, cyan, and emerald gradients
+  * Added glassmorphism effects with backdrop blur and transparency
+  * Integrated animated gradient backgrounds and rotating elements
+  * Enhanced buttons with shimmer effects and hover animations
+  * Upgraded form controls with modern glass styling
+  * Improved responsive design for mobile compatibility
 
 ## User Preferences
 
