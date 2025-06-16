@@ -106,6 +106,11 @@ A full-stack web application for performing comprehensive statistical significan
   * Enhanced buttons with shimmer effects and hover animations
   * Upgraded form controls with modern glass styling
   * Improved responsive design for mobile compatibility
+- June 16, 2025. Fixed statistical concepts accordion functionality:
+  * Added proper Angular click event handlers for accordion toggles
+  * Implemented manual accordion logic with proper state management
+  * Fixed missing Bootstrap attributes and accessibility features
+  * Confirmed smooth expand/collapse interactions working correctly
 
 ## User Preferences
 
